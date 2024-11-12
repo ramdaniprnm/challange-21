@@ -1,0 +1,103 @@
+<%- include('partials/header.ejs') %>
+
+    <div class="card">
+        <div class="card-header text-center">
+            <h2>PostgreSQL BREADS(Browse, Read, Edit, Add, Delete, Sorting)</h2>
+        </div>
+        <div class="card-body">
+            <form>
+                <div class="row mb-3">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputEmail3">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="inputPassword3">
+                    </div>
+                </div>
+                <fieldset class="row mb-3">
+                    <legend class="col-form-label col-sm-2 pt-0">Operation</legend>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="operation" id="OR" value="option1"
+                                checked>
+                            <label class="form-check-label" for="OR">
+                                OR
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="operation" id="AND" value="AND">
+                            <label class="form-check-label" for="AND2">
+                                AND
+                            </label>
+
+                        </div>
+                </fieldset>
+                <div class="row mb-3">
+                    <div class="col-sm-10 offset-sm-2">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-info">Seacrh</button>
+                <button type="button" class="btn btn-warning">Reset</button>
+            </form>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Complete</th>
+                    <th scope="col">Deadline</th>
+                    <th scope="col">actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% data.forEach((item, index)=> { %>
+                    <tr>
+                        <th scope="row">
+                            <%= index + 1 %>
+                        </th>
+                        <td>
+                            <%= item.title %>
+                        </td>
+                        <td>
+                            <%= item.complete %>
+                        </td>
+                        <td>
+                            <%= item.deadline %>
+                        </td>
+                        <td>
+                            <a href="/update/<%= item.id %>" type="submit" class="btn btn-success">update</a>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <a href="/add" class="btn btn-primary">+</a>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    </div>
+
+    <%- include('partials/footer.ejs') %>
