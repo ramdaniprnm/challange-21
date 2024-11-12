@@ -18,5 +18,24 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
-  }
+  },
+  "description": "PosgreSQL BREADS with Express and Bootstrap",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ramdaniprnm/Challenge-21.git"
+  },
+  "keywords": [
+    "Express",
+    "Bootstrap",
+    "Font",
+    "Awesome",
+    "Bcrypt"
+  ],
+  "author": "Ramdani Orang Biasa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ramdaniprnm/Challenge-21/issues"
+  },
+  "homepage": "https://github.com/ramdaniprnm/Challenge-21#readme"
 }
