@@ -1,34 +1,41 @@
 <%- include('partials/header.ejs') %>
-    <div class="card">
-        <div class="card-header text-center">
-            <h1>Please Sign In</h1>
-        </div>
-        <div class="card-body">
-            <form action="/login" method="post">
-                <div class="row mb-3">
-                    <label for="email" class="col-sm-2 col-form-label"></label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" id="email" name="email"
-                            placeholder="example@gmail.com">
+    <div class="container d-flex flex-column align-items-center">
+        <img src="/avatars/rubicamp.png" alt="Rubicamp Logo" class="logo">
+        <div class="card">
+            <div class="card-header text-center">
+
+                <h2>Please Sign In</h2>
+            </div>
+            <div class="card-body">
+                <form action="/login" method="post">
+                    <div class="row mb-3">
+                        <label for="email" class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-100">
+                            <input type="email" class="form-control" id="email" name="email"
+                                placeholder="example@gmail.com">
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <label for="password" class="col-sm-2 col-form-label"></label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="password" name="password"
-                            placeholder="password">
+                    <div class="row mb-3">
+                        <label for="password" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-100">
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="password">
+                        </div>
                     </div>
-                </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-sm-12">
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                    <div class="row mb-3 d-flex justify-content-between">
+                        <div class="col-sm-100">
+                            <button type="submit" class="btn btn-primary">Sign in</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <p>Don't have an account? Please <a href="/register">Sign Up</a>!</p>
+                <%- include('partials/alert.ejs') %>
             </div>
         </div>
-        </form>
-    </div>
-    <div class="card-footer text-center">
-        <p>doesn't have an account? please <a href="/register">Sign Up</a>!</p>
-    </div>
+        <footer class="text-center mt-4">
+            <p>© 2017–2024</p>
+        </footer>
     </div>
     <%- include('partials/footer.ejs') %>

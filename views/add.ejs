@@ -5,7 +5,7 @@
       <h2>Add Title</h2>
     </div>
     <div class="card-body">
-      <form action="/add" method="post">
+      <form action="/todos/add" method="post">
         <div class="row mb-3">
           <label for="title" class="col-sm-2 col-form-label">Title</label>
           <div class="col-sm-10">
@@ -14,8 +14,8 @@
         </div>
     </div>
     <div class="card-footer">
-      <button type="submit" class="btn btn-primary">+</button>
-      <a href="/" class="btn btn-warning">reset</a> <!-- nanti memakai fontAwesome  -->
+      <button type="submit" class="btn btn-primary"><i class="fa-regular fa-floppy-disk"></i></button>
+      <a href="/todos" class="btn btn-warning"><i class="fa-solid fa-rotate-left"></i></a>
       </form>
     </div>
     <%- include('partials/footer.ejs') %>
