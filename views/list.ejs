@@ -26,15 +26,15 @@
                 <div class="form-group row align-items-center mb-3">
                     <label for="deadlineStart" class="col-sm-2 col-form-label">Deadline</label>
                     <div class="col-sm-4">
-                        <input type="date" class="form-control" name="deadlineStart" id="deadlineStart" min="1900-01-01"
-                            max="2024-12-31" value="<%= deadlineStart || '' %>">
+                        <input type="date" class="form-control" name="deadlineStart" id="deadlineStart" max="2024-12-31"
+                            value="<%= deadlineStart || '' %>">
                     </div>
                     <div class="col-sm-1 text-center">
-                        <span>s.d.</span>
+                        <span> s.d. </span>
                     </div>
                     <div class="col-sm-4">
-                        <input type="date" class="form-control" name="deadlineEnd" id="deadlineEnd" min="1900-01-01"
-                            max="2024-12-31" value="<%= deadlineEnd || '' %>">
+                        <input type="date" class="form-control" name="deadlineEnd" id="deadlineEnd" max="2024-12-31"
+                            value="<%= deadlineEnd || '' %>">
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -43,8 +43,8 @@
                         <select class="form-select" aria-label="complete" name="complete" id="complete">
                             <option value="" <%=typeof complete==='undefined' ? 'selected' : '' %>>-select complete-
                             </option>
-                            <option value="1" <%=complete==='1' ? 'selected' : '' %>>Yes</option>
-                            <option value="0" <%=complete==='0' ? 'selected' : '' %>>Not Yet</option>
+                            <option value="true" <%=complete==='true' ? 'selected' : '' %>>Done</option>
+                            <option value="false" <%=complete==='false' ? 'selected' : '' %>>Not Yet</option>
                         </select>
                     </div>
                 </div>
@@ -52,16 +52,16 @@
                     <legend class="col-form-label col-sm-2 pt-0">Operation</legend>
                     <div class="col-sm-10">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="operation" value="OR" <%=operation=="OR"
-                                ? 'checked' : 'checked' %>>
-                            <label class="form-check-label" for="OR">
+                            <input class="form-check-input" type="radio" name="operation" value="OR" id="or"
+                                <%=operation=="OR" ? 'checked' : 'checked' %>>
+                            <label class="form-check-label" for="or">
                                 OR
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="operation" value="AND"
+                            <input class="form-check-input" type="radio" name="operation" value="AND" id="and"
                                 <%=operation=="AND" ? 'checked' : '' %>>
-                            <label class="form-check-label" for="AND">
+                            <label class="form-check-label" for="and">
                                 AND
                             </label>
                         </div>

@@ -161,6 +161,9 @@ img {
   border-radius: 50px;
 }
 
+img#preview {
+  border-radius: 0px;
+}
 
 .logo {
   width: 250px;
@@ -174,3 +177,4 @@ p {
 body {
   background-color: #e9e9e9e9;
 }
+
