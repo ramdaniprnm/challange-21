@@ -25,5 +25,22 @@
         </div>
         </form>
     </div>
+<script>
+    const avatarInput = document.querySelector('input[name="avatar"]');
+    const previewImage = document.getElementById('preview');
+
+    avatarInput.addEventListener('change', () => {
+        const selectedFile = avatarInput.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                previewImage.src = reader.result;
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    });
+
+</script>
+
 
     <%- include('partials/footer.ejs') %>

@@ -12,9 +12,9 @@ const { isLoggedIn } = require('./helpers/util');
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  password: 'Bandung123',
+  password: 'postgres',
   port: 5432,
-  database: 'bread'
+  database: 'postgres'
 });
 
 // app.use('/', indexRouter)
