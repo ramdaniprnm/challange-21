@@ -32,19 +32,17 @@ module.exports = function (db) {
       query.push(`deadline <= $${params.length + 1}`);
       params.push(deadlineEnd);
     }
-    const whereClause = query.length ? `AND ${query.join(` ${operation} `)}` : '';
+    const whereClause = query.length ? ` ${query.join(` ${operation} `)} AND ` : '';
     const sql = `ORDER BY ${'sortBy'} ${sortMode}`
 
     try {
       const operation = req.query.operation || 'OR';
+      const countResult = await db.query(`SELECT COUNT(*) as total FROM todos WHERE ${whereClause} user_id=${req.session.user.id}`, params);
 
-      const countResult = await db.query(`SELECT COUNT(*) as total FROM todos ${whereClause} WHERE user_id=${req.session.user.id}`);
       const totalRows = countResult.rows[0].total;
       const totalPages = Math.ceil(totalRows / limit);
 
-      const dataResult = await db.query(`SELECT * FROM todos ${whereClause} WHERE user_id=${req.session.user.id} ORDER BY ${sortBy} ${sortMode} LIMIT ${limit} OFFSET ${offset}`, params);
-      console.log(`Data fetched: ${JSON.stringify(dataResult.rows, null, 2)}`);
-
+      const dataResult = await db.query(`SELECT * FROM todos WHERE ${whereClause} user_id=${req.session.user.id}  ORDER BY ${sortBy} ${sortMode} LIMIT ${limit} OFFSET ${offset}`, params);
       dataResult.rows.forEach(row => {
         row.deadline = moment(row.deadline).format('DD MMM YYYY HH:mm');
       })
@@ -92,12 +90,12 @@ module.exports = function (db) {
   });
 
   router.get('/edit/:id', async (req, res, next) => {
-    const { id } = req.params;
     try {
+      const { id } = req.params;
       const { rows } = await db.query('SELECT * FROM todos WHERE id = $1', [id]);
-      if (rows.length === 0) return res.status(404).send('Todo not found');
+      const item = rows[0];
+      item.complete = item.complete === true || item.complete === 'true';
       res.render('edit', { item: rows[0] });
-      console.log('if exist: ', rows[0]);
     } catch (err) {
       console.error('Error fetching todo:', err);
       res.status(500).send('Error retrieving todo');
@@ -105,13 +103,14 @@ module.exports = function (db) {
   });
 
   router.post('/edit/:id', async (req, res, next) => {
-    const { id } = req.params;
-    const { title, deadline, complete } = req.body;
-
     try {
-      const query = `UPDATE todos SET title = $1, deadline = $2, complete = $3 WHERE id = $4`;
-      const { rowCount } = await db.query(query, [title, deadline, complete, id]);
-      if (rowCount === 0) return res.status(404).send('Todo not found');
+      const { id } = req.params;
+      const { title, deadline } = req.body;
+      const complete = req.body.complete === 'on';
+
+      const query = `UPDATE todos SET title = $1, deadline = $2, complete = $3 WHERE id = $4 RETURNING *`;
+      const { rows } = await db.query(query, [title, deadline, complete, id]);
+      if (rows.length === 0) return res.status(404).send('Todo not found');
       res.redirect('/todos');
     } catch (err) {
       console.error('Error updating todo:', err);
