@@ -56,8 +56,8 @@ module.exports = function (db) {
         deadlineStart,
         deadlineEnd,
         offset,
-        page,
-        totalPages,
+        page: parseInt(page),
+        totalPages: parseInt(totalPages),
         title,
         complete,
         url

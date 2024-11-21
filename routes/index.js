@@ -6,7 +6,10 @@ const path = require('path')
 module.exports = function (db) {
 
   router.get('/', function (req, res, next) {
-    res.render('login', { errorMessage: req.flash('errorMessage'), successMessage: req.flash('successMessage') });
+    res.render('login', { alertMessage: req.flash('alertMessage') });
+  });
+  router.get('/register', function (req, res, next) {
+    res.render('register', { alertMessage: req.flash('alertMessage') });
   });
 
   router.post('/login', async function (req, res, next) {
@@ -16,12 +19,12 @@ module.exports = function (db) {
     try {
       const { rows } = await db.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [email])
       if (rows.length == 0) {
-        req.flash('errorMessage', "email doesn't exist!")
+        req.flash('alertMessage', [true, "email not found!"])
         return res.redirect('/')
       }
 
       if (!comparePassword(password, rows[0].password)) {
-        req.flash('errorMessage', "password is wrong!")
+        req.flash('alertMessage', [true, "password is wrong!"])
         return res.redirect('/')
       }
       req.session.user = {
@@ -33,7 +36,7 @@ module.exports = function (db) {
       res.redirect('/todos');
     } catch (e) {
       console.log(e);
-      req.flash('errorMessage', "something went wrong!")
+      req.flash('alertMessage', [true, "something went wrong!"])
       res.redirect('/');
     }
   });
@@ -46,12 +49,12 @@ module.exports = function (db) {
     const { email, password, retype } = req.body;
     try {
       if (password !== retype) {
-        req.flash('successMessage', "please sign in!")
+        req.flash('alertMessage', [true, "password not match!"])
         return res.redirect('/register')
       }
       const { rows } = await db.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [email]);
       if (rows.length > 0) {
-        req.flash('errorMessage', "email already exist!")
+        req.flash('alertMessage', [true, "email already exist!"])
         return res.redirect('/register')
       }
       const { rows: users } = await db.query('INSERT INTO users(email, password) VALUES($1, $2) RETURNING *', [email, hashPassword(password)]);
@@ -61,10 +64,11 @@ module.exports = function (db) {
         email: users[0].email,
         avatar: users[0].avatar
       };
+      req.flash('alertMessage', [false, "successfully registered, please sign in!"])
       res.redirect('/');
     } catch (e) {
       console.log(e);
-      req.flash('errorMessage', "something went wrong!")
+      req.flash('alertMessage', [true, "something went wrong!"])
     }
   });
 
