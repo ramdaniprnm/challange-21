@@ -8,23 +8,23 @@ module.exports = function (db) {
 
 
     const url = req.url == '/' ? '/todos/?page=1&sortBy=id&sortMode=asc' : `/todos${req.url}`;
-    const { title = '', startdate = '', complete = '', operation = 'OR', sortBy = 'id', sortMode = 'asc', deadlineStart = '', deadlineEnd = '', deadline = '', page = 1 } = req.query;
+    const { title = '', complete = '', operation = 'OR', sortBy = 'id', sortMode = 'asc', deadlineStart = '', deadlineEnd = '', page = 1 } = req.query;
     const limit = 5;
     const offset = (page - 1) * limit;
     const query = [];
     const params = [];
 
     if (title) {
-      query.push(`title ilike '%' || $${params.length + 1} || '%'`);
-      params.push(title);
+      query.push(`title ilike '%' || $${params.length + 1} || '%' AND user_id = $${params.length + 2}`);
+      params.push(title, req.session.user.id);
     }
     if (complete) {
       query.push(`complete = $${params.length + 1}`);
       params.push(complete);
     }
     if (deadlineStart && deadlineEnd) {
-      query.push(`deadline BETWEEN $${params.length + 1} AND $${params.length + 2}`);
-      params.push(deadlineStart, deadlineEnd);
+      query.push(`deadline BETWEEN $${params.length + 1} AND $${params.length + 2} AND user_id = $${params.length + 3}`);
+      params.push(deadlineStart, deadlineEnd, req.session.user.id);
     } else if (deadlineStart) {
       query.push(`deadline >= $${params.length + 1}`);
       params.push(deadlineStart);
@@ -32,32 +32,34 @@ module.exports = function (db) {
       query.push(`deadline <= $${params.length + 1}`);
       params.push(deadlineEnd);
     }
-    const whereClause = query.length ? ` ${query.join(` ${operation} `)} AND ` : '';
-    const sql = `ORDER BY ${'sortBy'} ${sortMode}`
+    const whereClause = query.length ? ` ${query.join(` ${operation} `)} AND` : '';
+    const sql = `ORDER BY ${sortBy} ${sortMode}`      
 
     try {
+    
       const operation = req.query.operation || 'OR';
       const countResult = await db.query(`SELECT COUNT(*) as total FROM todos WHERE ${whereClause} user_id=${req.session.user.id}`, params);
 
       const totalRows = countResult.rows[0].total;
       const totalPages = Math.ceil(totalRows / limit);
 
-      const dataResult = await db.query(`SELECT * FROM todos WHERE ${whereClause} user_id=${req.session.user.id}  ORDER BY ${sortBy} ${sortMode} LIMIT ${limit} OFFSET ${offset}`, params);
+      const dataResult = await db.query(`SELECT * FROM todos WHERE ${whereClause} user_id=${req.session.user.id} ${sql} LIMIT ${limit} OFFSET ${offset}`, params);
+      
       dataResult.rows.forEach(row => {
-        row.deadline = moment(row.deadline).format('DD MMM YYYY HH:mm');
+        row.deadline = moment(row.deadline).format('DD MMM YYYY HH:mm');                
       })
 
       res.render('list', {
         data: dataResult.rows,
         users: req.session.user,
-        sql,
         query: req.query,
+        page: parseInt(page),
+        totalPages: parseInt(totalPages),
+        sql,
         operation,
         deadlineStart,
         deadlineEnd,
         offset,
-        page: parseInt(page),
-        totalPages: parseInt(totalPages),
         title,
         complete,
         url
