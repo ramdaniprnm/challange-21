@@ -23,20 +23,19 @@ module.exports = function (db) {
       params.push(complete);
     }
     if (deadlineStart && deadlineEnd) {
-      query.push(`deadline BETWEEN $${params.length + 1} AND $${params.length + 2} AND user_id = $${params.length + 3}`);
+      query.push(`DATE(deadline) BETWEEN $${params.length+1} AND $${params.length + 2} AND user_id = $${params.length + 3}`);
       params.push(deadlineStart, deadlineEnd, req.session.user.id);
     } else if (deadlineStart) {
-      query.push(`deadline >= $${params.length + 1}`);
+      query.push(`DATE(deadline) >= $${params.length + 1}`);
       params.push(deadlineStart);
     } else if (deadlineEnd) {
-      query.push(`deadline <= $${params.length + 1}`);
+      query.push(`DATE(deadline) <= $${params.length + 1}`);
       params.push(deadlineEnd);
     }
     const whereClause = query.length ? ` ${query.join(` ${operation} `)} AND` : '';
     const sql = `ORDER BY ${sortBy} ${sortMode}`      
 
     try {
-    
       const operation = req.query.operation || 'OR';
       const countResult = await db.query(`SELECT COUNT(*) as total FROM todos WHERE ${whereClause} user_id=${req.session.user.id}`, params);
 
