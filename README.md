@@ -8,7 +8,7 @@ These instructions will help you set up the project on your local machine for de
 Before running this project, ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (v16 or later) - JavaScript runtime environment.
-- [Postgre4](https://www.PgAdmin.com/) - Sql database.
+- [Postgre4](https://www.pgadmin.org/) - Sql database.
 - [Git](https://git-scm.com/) - Version control system.
 
 ### installing
